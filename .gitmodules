@@ -1,0 +1,3 @@
+[submodule "HSI-datasets"]
+	path = HSI-datasets
+	url = https://github.com/mhaut/HSI-datasets
