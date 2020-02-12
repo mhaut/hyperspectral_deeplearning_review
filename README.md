@@ -1,6 +1,7 @@
-# Deep Learning Classifiers for Hyperspectral Imaging: A Review
-![](https://img.shields.io/github/stars/mhaut/hyperspectral_deeplearning_review.svg) ![](https://img.shields.io/github/forks/mhaut/hyperspectral_deeplearning_review.svg) ![](https://img.shields.io/github/issues/mhaut/hyperspectral_deeplearning_review.svg)
-The Code for "Deep Learning Classifiers for Hyperspectral Imaging: A Review". [https://www.sciencedirect.com/science/article/pii/S0924271619302187]
+## Deep Learning Classifiers for Hyperspectral Imaging: A Review
+![](https://img.shields.io/github/stars/mhaut/hyperspectral_deeplearning_review.svg) ![](https://img.shields.io/github/forks/mhaut/hyperspectral_deeplearning_review.svg) ![](https://img.shields.io/github/issues/mhaut/hyperspectral_deeplearning_review.svg)  
+The Code for "Deep Learning Classifiers for Hyperspectral Imaging: A Review".  
+[https://www.sciencedirect.com/science/article/pii/S0924271619302187]
 ```
 M. E. Paoletti, J. M. Haut, J. Plaza and A. Plaza.
 Deep Learning Classifiers for Hyperspectral Imaging: A Review
@@ -11,7 +12,7 @@ vol. 158, pp. 279-317, December 2019.
 
 ![reviewHSI](https://github.com/mhaut/hyperspectral_deeplearning_review/blob/master/images/paviaclasf.png)
 
-## Example of use
+### Example of use
 ```
 # Without datasets
 git clone https://github.com/mhaut/hyperspectral_deeplearning_review/
