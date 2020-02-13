@@ -34,9 +34,7 @@ def loadData(name, num_components=None, preprocessing="standard"):
 	else:
 		print("NO DATASET")
 		exit()
-
 	num_class = 15 if name == "UH" else 9 if name in ["UP", "DUP", "DUPr"] else 16
-
 	shapeor = data.shape
 	data = data.reshape(-1, data.shape[-1])
 	if num_components != None:
@@ -45,8 +43,8 @@ def loadData(name, num_components=None, preprocessing="standard"):
 		shapeor[-1] = num_components
 	if preprocessing == "standard": data = StandardScaler().fit_transform(data)
 	elif preprocessing == "minmax": data = MinMaxScaler().fit_transform(data)
+	elif preprocessing == "none": pass
 	else: print("[WARNING] Not preprocessing method selected")
-
 	data = data.reshape(shapeor)
 	return data, labels, num_class
 
@@ -55,30 +53,37 @@ def split_data(pixels, labels, value, splitdset="sklearn", rand_state=None):
 	if splitdset == "sklearn":
 		X_test, X_train, y_test, y_train = \
 			train_test_split(pixels, labels, test_size=value, stratify=labels, random_state=rand_state)
-	elif splitdset == "custom":
+	elif "custom" in splitdset:
 		labels = labels.reshape(-1)
 		X_train = []; X_test = []; y_train = []; y_test = [];
-		values = np.unique(value, return_counts=1)[1][1:]
-		for idi, i in enumerate(values):
-			samples = pixels[labels==idi+1]
-			samples = random_single(samples, rstate=rand_state)
-			for a in samples[:i]: 
-				X_train.append(a); y_train.append(idi)
-			for a in samples[i:]:
-				X_test.append(a); y_test.append(idi)
+		if "custom" == splitdset: 
+			values = np.unique(value, return_counts=1)[1][1:]
+			for idi, i in enumerate(values):
+				samples = pixels[labels==idi+1]
+				samples = random_single(samples, rstate=rand_state)
+				for a in samples[:i]: 
+					X_train.append(a); y_train.append(idi)
+				for a in samples[i:]:
+					X_test.append(a); y_test.append(idi)
+		elif "custom2" == splitdset:
+			for idi, i in enumerate(value):
+				samples = pixels[labels==idi]
+				samples = random_single(samples, rstate=rand_state)
+				for a in samples[:i]: 
+					X_train.append(a); y_train.append(idi)
+				for a in samples[i:]:
+					X_test.append(a); y_test.append(idi)
 		X_train = np.array(X_train); X_test = np.array(X_test)
 		y_train = np.array(y_train); y_test = np.array(y_test)
-		X_train, y_train = random_unison(X_train,y_train, rstate=None)
-		X_test, y_test   = random_unison(X_test,y_test, rstate=None)
+		X_train, y_train = random_unison(X_train,y_train, rstate=rand_state)
 	return X_train, X_test, y_train, y_test
 
 
 def select_samples(pixels, labels, samples):
 	return split_data(pixels, labels, samples, splitdset="custom")
-	
 
-def load_split_data_fix(name, pixels):
-	data_path = os.path.join(os.getcwd(),'../HSI-datasets')
+def load_split_data_fix(name, pixels, path_dset='../HSI-datasets'):
+	data_path = os.path.join(os.getcwd(), path_dset)
 	if name == "UH":
 		y_train = sio.loadmat(os.path.join(data_path, 'houston_gt.mat'))['houston_gt_tr'].reshape(-1)
 		y_test = sio.loadmat(os.path.join(data_path, 'houston_gt.mat'))['houston_gt_te'].reshape(-1)
@@ -106,19 +111,19 @@ def load_split_data_fix(name, pixels):
 		y_train = y_train[y_train!=0] - 1
 		y_test  = y_test[y_test!=0] - 1
 		X_train, y_train = random_unison(X_train,y_train, rstate=None)
-		X_test, y_test = random_unison(X_test,y_test, rstate=None)
+		#X_test, y_test = random_unison(X_test,y_test, rstate=None)
 	return X_train, X_test, y_train, y_test
 
 
 def padWithZeros(X, margin=2):
-	# ALERT: TRY THIS
-	#import cv2
-	# return cv2.copyMakeBorder(X, margin, margin, margin, margin, cv2.BORDER_REPLICATE)
 	newX = np.zeros((X.shape[0] + 2 * margin, X.shape[1] + 2* margin, X.shape[2]))
 	x_offset = margin
 	y_offset = margin
 	newX[x_offset:X.shape[0] + x_offset, y_offset:X.shape[1] + y_offset, :] = X
 	return newX
+	# ALERT: TRY THIS
+	#import cv2
+	# return cv2.copyMakeBorder(X, margin, margin, margin, margin, cv2.BORDER_REPLICATE)
 
 
 def createImageCubes(X, y, windowSize=5, removeZeroLabels = True):
