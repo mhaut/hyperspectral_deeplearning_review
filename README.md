@@ -26,9 +26,22 @@ python join_dsets.py
 ### Run code
 Go to algorithms folder and run
 ```
+# Training from scratch
 python <algorithm>.py --dataset IP 
 # Example:
 python svm.py --dataset IP --tr_percent 0.15
+
+# Fine-tuning (not recommended) <DENSENET121, MOBILENET, RESNET50, VGG16, VGG19>:
+python pretrained_cnn.py --dataset IP --arch <architecture>
+# Example:
+python pretrained_cnn.py --dataset IP --arch VGG16
+
+# Transfer learning <CNN1D, CNN2D, CNN2D40bands, CNN3D>, two steps:
+python transfer_learning.py --dataset1 IP --dataset2 SV --arch <algorithm> --search_base_model
+python transfer_learning.py --dataset1 IP --dataset2 SV --tr_samples 2 --use_val --arch <algorithm> --use_transfer_learning
+# Example:
+python transfer_learning.py --dataset1 IP --dataset2 SV --arch CNN2D40bands --search_base_model
+python transfer_learning.py --dataset1 IP --dataset2 SV --tr_samples 2 --use_val --arch CNN2D40bands --use_transfer_learning
 ```
 
 #### Other parameters
