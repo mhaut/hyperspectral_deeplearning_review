@@ -143,6 +143,7 @@ def main():
 							callbacks = [ModelCheckpoint("/tmp/best_base_model.h5", monitor='loss', verbose=0, save_best_only=True)])
 			del pixels, labels
 			del clf; K.clear_session(); gc.collect()
+			exit()
 
 		pixels, labels, num_class = \
 						mydata.loadData(args.dataset2, num_components=args.components, preprocessing=args.preprocess)
