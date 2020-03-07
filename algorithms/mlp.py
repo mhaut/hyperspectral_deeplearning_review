@@ -76,7 +76,7 @@ def main():
 
 		n_bands = x_train.shape[-1]
 		clf = get_model_compiled(n_bands, num_class)
-		valdata = (x_val, keras_to_categorical(y_train, num_class)) if args.use_val else (x_test, keras_to_categorical(y_test, num_class))
+		valdata = (x_val, keras_to_categorical(y_val, num_class)) if args.use_val else (x_test, keras_to_categorical(y_test, num_class))
 		clf.fit(x_train, keras_to_categorical(y_train, num_class),
 						batch_size=args.batch_size,
 						epochs=args.epochs,
